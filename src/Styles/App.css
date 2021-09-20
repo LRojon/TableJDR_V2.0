@@ -1,0 +1,24 @@
+:root {
+    --main-color: #6190e6;
+    --selected-color: #4169e1;
+    --text-color: #b0c4de;
+    --secondary-color: #4682b4;
+}
+
+.App {
+    display: flex;
+    flex: 1;
+    height: 100vh;
+}
+
+.Main {
+    display: flex;
+    flex: 8;
+    flex-direction: column;
+}
+
+.Timeline {
+    display: flex;
+    flex: 1;
+    border: solid 3px var(--main-color);
+}

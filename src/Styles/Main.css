@@ -1,0 +1,25 @@
+nav {
+    display: flex;
+    height: 50px;
+    background-color: var(--main-color);
+    color: var(--text-color);
+    font-size: x-large;
+    padding: 7px;
+}
+
+.tab-item {
+    display: flex;
+    margin-left: 10px;
+    padding: 5px;
+    border-radius: 10px;
+    align-items: center;
+    transition: ease-out 500ms ;
+}
+.tab-item:not(.selected):hover {
+    background-color: var(--secondary-color);
+}
+
+.tab-item.selected {
+    background-color: var(--selected-color);
+    font-weight: bold;
+}
