@@ -1,4 +1,5 @@
 import React from 'react'
+import '../Styles/Creatures.css'
 
 const Creatures = ({ style }) => {
     return (
