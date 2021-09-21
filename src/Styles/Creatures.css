@@ -1,0 +1,21 @@
+.Creature {
+    display: none;
+}
+
+.Creature.show {
+    display: flex;
+    flex: 1;
+}
+
+.tree {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    border-right: solid var(--main-color) 2px;
+    color: var(--text-color);
+}
+
+.focus {
+    display: flex;
+    flex: 8;
+}

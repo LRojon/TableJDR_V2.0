@@ -21,7 +21,7 @@ const Main = ({ className }) => {
                 <span onClick={() => setCurrentTab('players')} className={currentTab === 'players' ? 'selected tab-item' : 'tab-item'} >Joueurs</span>
                 <span onClick={() => setCurrentTab('tools')} className={currentTab === 'tools' ? 'selected tab-item' : 'tab-item'} >Outils</span>
             </nav>
-            <Creatures style={{display: currentTab === 'creatures' ? 'block' : 'none'}} />
+            <Creatures show={currentTab === 'creatures'} />
             <Players style={{display: currentTab === 'players' ? 'block' : 'none'}} />
             <Tools style={{display: currentTab === 'tools' ? 'block' : 'none'}} />
         </div> 
