@@ -1,6 +1,5 @@
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { fas } from '@fortawesome/free-solid-svg-icons'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import React, { useState } from 'react'
 import Creatures from './Creatures'
 import Players from './Players'
@@ -16,7 +15,7 @@ const Main = ({ className }) => {
     return (
         <div className={className} >
             <nav>
-                <FontAwesomeIcon style={{fontSize: 48, color: 'white'}} icon='dice-d20' />
+                <i style={{fontSize: 48, color: 'white'}} className='fal fa-dice-d20' ></i>
                 <span onClick={() => setCurrentTab('creatures')} className={currentTab === 'creatures' ? 'selected tab-item' : 'tab-item'} >Créatures</span>
                 <span onClick={() => setCurrentTab('players')} className={currentTab === 'players' ? 'selected tab-item' : 'tab-item'} >Joueurs</span>
                 <span onClick={() => setCurrentTab('tools')} className={currentTab === 'tools' ? 'selected tab-item' : 'tab-item'} >Outils</span>

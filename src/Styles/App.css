@@ -1,7 +1,8 @@
 :root {
     --main-color: #6190e6;
     --selected-color: #4169e1;
-    --text-color: #b0c4de;
+    --text-color: white;
+    --secondary-text-color: #b0c4de;
     --secondary-color: #4682b4;
 }
 
@@ -21,4 +22,17 @@
     display: flex;
     flex: 1;
     border: solid 3px var(--main-color);
+}
+
+
+input {
+    border: solid 2px #0004;
+    border-radius: 10px;
+    background-color: var(--main-color);
+    color: var(--text-color);
+    font-size: medium;
+    padding: 2px;
+}
+input::placeholder {
+    color: #fffe;
 }
