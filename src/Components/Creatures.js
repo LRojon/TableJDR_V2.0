@@ -3,23 +3,14 @@ import Tree from 'react-animated-tree-v2'
 import '../Styles/Creatures.css'
 import creatures from '../Data/Creatures'
 import CreatureCard from './Helper/CreatureCard'
-
-const CustomTree = (props) => (
-    <Tree
-        icons={{
-            plusIcon: (props) => <i {...props} className='fad fa-book' ></i>,
-            minusIcon: (props) => <i {...props} className='fad fa-book-open' ></i>,
-            closeIcon: props.player ? (props) => <i {...props} className='fad fa-scroll-old' ></i> : (props) => <i {...props} className='fad fa-paw-claws' ></i>
-        }}
-        {...props}
-    />
-)
+import CustomTree from './Helper/CustomTree'
 
 const Creatures = ({ show }) => {
 
     const [treeSort, setTreeSort] = useState('name')
     const [tmpCreatures, setTmpCreatures] = useState(creatures)
     const [isSearch, setIsSearch] = useState(false)
+    const [focus, setFocus] = useState([])
 
     const makeTree = (sort) => {
         let categories = []
@@ -46,17 +37,23 @@ const Creatures = ({ show }) => {
             >
                 {
                     categories.map(elem => {
-                        return <CustomTree content={elem} >
-                            {
-                                tmpCreatures.filter(creature => isInCategory(sort, creature, elem))
-                                .sort((a, b) => a.name < b.name ? -1 : 1)
-                                .map(el => {
-                                    return (
-                                        <CustomTree content={el.name} />
-                                    )
-                                })
-                            }
-                        </CustomTree>
+                        return (
+                            <CustomTree content={elem} >
+                                {
+                                    tmpCreatures.filter(creature => isInCategory(sort, creature, elem))
+                                    .sort((a, b) => a.name < b.name ? -1 : 1)
+                                    .map(el => {
+                                        return (
+                                            <CustomTree 
+                                                style={{cursor: 'pointer'}}
+                                                onItemClick={() => addToFocus(el.name)} 
+                                                content={el.name} 
+                                            />
+                                        )
+                                    })
+                                }
+                            </CustomTree>
+                        )
                     })
                 }
             </Tree>
@@ -89,6 +86,35 @@ const Creatures = ({ show }) => {
         }
     }
 
+    const addToFocus = (name) => {
+        let crea = {...creatures.find(elem => elem.name === name)}
+        crea.name += ' ' + (focus.filter(elem => elem._id === crea._id).length + 1)
+        setFocus([...focus, crea])
+    }
+
+    const delFromFocus = (crea) => {
+        let tmp = [...focus]
+        tmp.splice(tmp.indexOf(crea), 1)
+        setFocus(tmp)
+    }
+
+    const _makeFocus = () => {
+        return (
+            <div className='focus' >
+                {
+                    focus.map(elem => {
+                        return (
+                            <CreatureCard 
+                                creature={elem}
+                                onDeleteClick={() => delFromFocus(elem)}
+                            />
+                        )
+                    })
+                }
+            </div>
+        )
+    }
+
     return (
         <div className={show ? 'Creature show' : 'Creature'} >
             <div className='tree' >
@@ -119,9 +145,9 @@ const Creatures = ({ show }) => {
                     }
                 </div>
             </div>
-            <div className='focus' >
-                <CreatureCard creature={creatures[0]} />
-            </div>
+            {
+                _makeFocus()
+            }
         </div>
     )
 }

@@ -15,7 +15,6 @@ const CreatureCard = ({ creature, onDeleteClick }) => {
         creature.skills.forEach(skill => {
             tmp += '<span>' + skill + '</span>'
         })
-        console.log(tmp)
         return tmp
     }
 

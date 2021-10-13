@@ -1,5 +1,5 @@
 let creatures = [
-    {
+    { // Gobelin
         "hp": {
             "stable": 7,
             "random": "2d6+0"
@@ -89,7 +89,7 @@ let creatures = [
             }
         ],
     },
-    {
+    { // Chevreuil
         "hp": {
             "stable": 4,
             "random": "1d8+0"
@@ -152,7 +152,7 @@ let creatures = [
             }
         ],
     },
-    {
+    { // Blême
         "hp": {
             "stable": 36,
             "random": "8d8+0"
@@ -249,7 +249,7 @@ let creatures = [
             }
         ]
     },
-    {
+    { // Ala
         "hp": {
             "stable": 127,
             "random": "15d8+60"
@@ -366,10 +366,10 @@ let creatures = [
             }
         ]
     },
-    {
+    { // Aigle
         "hp": {
             "stable": 3,
-            "random": "1d6"
+            "random": "1d6+0"
         },
         "stats": {
             "str": {
@@ -438,7 +438,7 @@ let creatures = [
             }
         ]
     },
-    {
+    { // Chien en chaleur
         hp: {
             stable: 0.1,
             random: "1d345,6+666"
