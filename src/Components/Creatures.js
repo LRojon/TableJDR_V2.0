@@ -38,13 +38,14 @@ const Creatures = ({ show }) => {
                 {
                     categories.map(elem => {
                         return (
-                            <CustomTree content={elem} >
+                            <CustomTree key={elem} content={elem} >
                                 {
                                     tmpCreatures.filter(creature => isInCategory(sort, creature, elem))
                                     .sort((a, b) => a.name < b.name ? -1 : 1)
                                     .map(el => {
                                         return (
                                             <CustomTree 
+                                                key={el.name}
                                                 style={{cursor: 'pointer'}}
                                                 onItemClick={() => addToFocus(el.name)} 
                                                 content={el.name} 
@@ -88,14 +89,13 @@ const Creatures = ({ show }) => {
 
     const addToFocus = (name) => {
         let crea = {...creatures.find(elem => elem.name === name)}
-        crea.name += ' ' + (focus.filter(elem => elem._id === crea._id).length + 1)
+        if(focus.filter(elem => elem._id === crea._id).length === 0) { crea.name += ' 1' }
+        else { crea.name += ' ' + (parseInt(focus.filter(elem => elem._id === crea._id).slice(-1)[0].name.split(' ')[1]) + 1) }
         setFocus([...focus, crea])
     }
 
-    const delFromFocus = (crea) => {
-        let tmp = [...focus]
-        tmp.splice(tmp.indexOf(crea), 1)
-        setFocus(tmp)
+    const delFromFocus = (name) => {   
+        setFocus(focus.filter(elem => elem.name !== name))
     }
 
     const _makeFocus = () => {
@@ -104,9 +104,10 @@ const Creatures = ({ show }) => {
                 {
                     focus.map(elem => {
                         return (
-                            <CreatureCard 
+                            <CreatureCard
+                                key={elem.name}
                                 creature={elem}
-                                onDeleteClick={() => delFromFocus(elem)}
+                                onDeleteClick={(name) => delFromFocus(name)}
                             />
                         )
                     })

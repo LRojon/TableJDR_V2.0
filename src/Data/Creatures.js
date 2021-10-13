@@ -228,7 +228,7 @@ let creatures = [
                     "stable": 10,
                     "random": "2d6+3",
                     "type": "tranchants",
-                    "effect": "Si la cible n'est pas un mort-vivant, elle doit réussir un jet de sauvegarde de Constitution DD 10 pour ne pas être paralysée pendant 1 minute. La cible peut retenter le jet de sauvegarde à la fin de chacun de ses tours et mettre fin à l'effet dont elle est victime en cas de réussite."
+                    "effect": "Si la cible n'est pas un mort-vivant, elle doit réussir un jet de sauvegarde de Constitution DD 10 pour ne pas être <i>paralysée</i> pendant 1 minute. La cible peut retenter le jet de sauvegarde à la fin de chacun de ses tours et mettre fin à l'effet dont elle est victime en cas de réussite."
                 },
                 "_id": "614d97317e507b756e7e1220"
             },
@@ -339,7 +339,7 @@ let creatures = [
                 "dmg": {
                     "stable": 14,
                     "random": "2d8+5",
-                    "type": "tranhants"
+                    "type": "tranchants"
                 },
                 "_id": "615340e9926a282907ac9a92"
             },
