@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import Tree from 'react-animated-tree-v2'
 import '../Styles/Creatures.css'
 import creatures from '../Data/Creatures'
+import CreatureCard from './Helper/CreatureCard'
 
 const CustomTree = (props) => (
     <Tree
@@ -72,9 +73,9 @@ const Creatures = ({ show }) => {
     }
 
     const searchByName = (name) => {
-        name = name != '' && name != null ? name : ''
+        name = name !== '' && name !== null ? name : ''
         name = name.trim().toLowerCase()
-        if(name != '') {
+        if(name !== '') {
             console.log(name)
             let tmp = []
             creatures.forEach(crea => {
@@ -119,6 +120,7 @@ const Creatures = ({ show }) => {
                 </div>
             </div>
             <div className='focus' >
+                <CreatureCard creature={creatures[0]} />
             </div>
         </div>
     )

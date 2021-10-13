@@ -296,7 +296,7 @@ let creatures = [
             "Immunité contre l'état Empoisonné"
         ],
         "senses": [
-            "ision dans le noir 18 m",
+            "Vision dans le noir 18 m",
             "Perception passive 19"
         ],
         "languages": [

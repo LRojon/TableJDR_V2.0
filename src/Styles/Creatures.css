@@ -55,4 +55,9 @@
 .focus {
     display: flex;
     flex: 8;
+    flex-wrap: wrap;
+    overflow-y: auto;
+    height: calc(100vh - 70px);
+    margin-right: 5px;
+    scrollbar-width: thin;
 }
