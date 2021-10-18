@@ -4,6 +4,7 @@ import '../Styles/Creatures.css'
 import creatures from '../Data/Creatures'
 import CreatureCard from './Helper/CreatureCard'
 import CustomTree from './Helper/CustomTree'
+import { makeHoardLoot, makeIndividualLoot } from './Helper/Loot'
 
 const Creatures = ({ show }) => {
 
@@ -11,6 +12,7 @@ const Creatures = ({ show }) => {
     const [tmpCreatures, setTmpCreatures] = useState(creatures)
     const [isSearch, setIsSearch] = useState(false)
     const [focus, setFocus] = useState([])
+    const [hoardLvl, setHoardLvl] = useState(0)
 
     const makeTree = (sort) => {
         let categories = []
@@ -88,14 +90,44 @@ const Creatures = ({ show }) => {
     }
 
     const addToFocus = (name) => {
-        let crea = {...creatures.find(elem => elem.name === name)}
+        let crea = {...creatures.find(elem => elem.name === name), loot: [], dead: false}
+        setHoardLvl(hoardLvl + eval(crea.dangerousness))
         if(focus.filter(elem => elem._id === crea._id).length === 0) { crea.name += ' 1' }
         else { crea.name += ' ' + (parseInt(focus.filter(elem => elem._id === crea._id).slice(-1)[0].name.split(' ')[1]) + 1) }
         setFocus([...focus, crea])
+        console.log(hoardLvl)
     }
 
-    const delFromFocus = (name) => {   
-        setFocus(focus.filter(elem => elem.name !== name))
+    const delFromFocus = (name) => {
+        if(name === 'Loot') {
+            setHoardLvl(0)
+            setFocus([])
+        }
+        else {
+            setHoardLvl(hoardLvl - eval(focus.find(elem => elem.name === name).dangerousness))
+            setFocus(focus.filter(elem => elem.name !== name))
+        }
+    }
+
+    const onDeath = (crea) => {
+        crea.loot = makeIndividualLoot(eval(crea.dangerousness))
+        crea.dead = true
+        let tmp = [...focus]
+        tmp[tmp.findIndex(e => e.name === crea.name)] = crea
+
+        let allDead = tmp.filter(e => e.dead).sort((a, b) => a.name > b.name ? 1 : -1)
+        let other = tmp.filter(e => !e.dead)
+        let loot = null
+        if(other.length === 0) {
+            loot = {
+                ...crea,
+                name: "Loot",
+                dead: true,
+                loot: makeHoardLoot(Math.ceil(hoardLvl))
+            }
+            other.push(loot)
+        }
+        setFocus(other.concat(allDead))
     }
 
     const _makeFocus = () => {
@@ -108,6 +140,7 @@ const Creatures = ({ show }) => {
                                 key={elem.name}
                                 creature={elem}
                                 onDeleteClick={(name) => delFromFocus(name)}
+                                onDeath={(crea) => onDeath(crea)}
                             />
                         )
                     })

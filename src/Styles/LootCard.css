@@ -1,0 +1,45 @@
+.LootCard {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    max-width: calc(20% - 10px);
+    max-height: /*420px;*/calc(50% - 10px);
+    min-width: calc(20% - 10px);
+    min-height: /*420px;*/calc(50% - 10px);
+    margin: 5px;
+    border-radius: 10px;
+    /*background: linear-gradient(60deg, #FFD700, #FFEF99, #FFD700);*/
+    /*background: linear-gradient(60deg, #FF6719, #FFD700 , #FF6719);*/
+    background: linear-gradient(60deg, #B87333, #e2c7ad , #B87333);
+    color: var(--text-color);
+}
+
+.LootCard .header {
+    display: flex;
+    flex: 1;
+    padding: 5px;
+    background-color: #0008;
+    border-radius: 10px 10px 0px 0px;
+    align-items: center;
+}
+
+.LootCard .header span {
+    flex: 10;
+    text-align: center;
+    font-size: larger;
+    font-weight: bold;
+}
+.LootCard .header button {
+    flex: 1;
+    font-size: large;
+    border: none;
+    background: none;
+    color: var(--text-color);
+    cursor: pointer;
+}
+
+.LootCard .body {
+    display: flex;
+    flex-direction: column;
+    flex: 20;
+}

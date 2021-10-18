@@ -3,14 +3,14 @@
     flex: 1;
     flex-direction: column;
     max-width: calc(20% - 10px);
-    max-height: calc(50% - 10px);
+    max-height: /*420px;*/calc(50% - 10px);
     min-width: calc(20% - 10px);
-    min-height: calc(50% - 10px);
+    min-height: /*420px;*/calc(50% - 10px);
     margin: 5px;
     border-radius: 10px;
     background-color: var(--main-color);
     color: var(--text-color);
-    transition: all 1000ms;
+    transition: transform 1000ms;
 }
 
 .CreatureCard .header {
