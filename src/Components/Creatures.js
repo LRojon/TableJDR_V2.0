@@ -97,18 +97,17 @@ const Creatures = ({ show, timeline, updateTimeline }) => {
             dead: false, 
             init: Randomizer('1d20+' + creatures.find(elem => elem.name === name).stats.dex.mod)
         }
-        updateTimeline([...timeline, crea])
+        updateTimeline(([...timeline, crea]).sort((a, b) => b.init - a.init))
         setHoardLvl(hoardLvl + eval(crea.dangerousness))
         if(focus.filter(elem => elem._id === crea._id).length === 0) { crea.name += ' 1' }
         else { 
             let n = 2
             focus.forEach(elem => {
-                console.log(elem.name === crea.name + ' ' + n)
-                if(elem.name === crea.name + ' ' + n) { n++ }
+                const number = parseInt(elem.name.split(' ')[elem.name.split(' ').length - 1])
+                if(n <= number) { n = number + 1 }
             })
             crea.name += ' ' + n 
         }
-        
         let allDead = focus.filter(e => e.dead).sort((a, b) => a.name > b.name ? 1 : -1)
         let other = focus.filter(e => !e.dead)
         other.push(crea)

@@ -484,7 +484,7 @@ let creatures = [
         languages: [
             "Oui"
         ],
-        dangerousness: "Over 9000",
+        dangerousness: "9000",
         xp: 0.88,
         abilities: [
             {
