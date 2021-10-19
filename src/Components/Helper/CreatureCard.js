@@ -28,6 +28,7 @@ const CreatureCard = ({ creature, onDeleteClick, onDeath }) => {
         if(!crea.current.dead) {
             if(val <= 0) {
                 setCurrentHP(val)
+                setModalOpen(false)
                 onDeath(crea.current)
             }
             else if(val > maxHP.current) {

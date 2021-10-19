@@ -5,8 +5,9 @@ import creatures from '../Data/Creatures'
 import CreatureCard from './Helper/CreatureCard'
 import CustomTree from './Helper/CustomTree'
 import { makeHoardLoot, makeIndividualLoot } from './Helper/Loot'
+import Randomizer from './Helper/Randomizer'
 
-const Creatures = ({ show }) => {
+const Creatures = ({ show, timeline, updateTimeline }) => {
 
     const [treeSort, setTreeSort] = useState('name')
     const [tmpCreatures, setTmpCreatures] = useState(creatures)
@@ -90,22 +91,40 @@ const Creatures = ({ show }) => {
     }
 
     const addToFocus = (name) => {
-        let crea = {...creatures.find(elem => elem.name === name), loot: [], dead: false}
+        let crea = {
+            ...creatures.find(elem => elem.name === name), 
+            loot: [], 
+            dead: false, 
+            init: Randomizer('1d20+' + creatures.find(elem => elem.name === name).stats.dex.mod)
+        }
+        updateTimeline([...timeline, crea])
         setHoardLvl(hoardLvl + eval(crea.dangerousness))
         if(focus.filter(elem => elem._id === crea._id).length === 0) { crea.name += ' 1' }
-        else { crea.name += ' ' + (parseInt(focus.filter(elem => elem._id === crea._id).slice(-1)[0].name.split(' ')[1]) + 1) }
-        setFocus([...focus, crea])
-        console.log(hoardLvl)
+        else { 
+            let n = 2
+            focus.forEach(elem => {
+                console.log(elem.name === crea.name + ' ' + n)
+                if(elem.name === crea.name + ' ' + n) { n++ }
+            })
+            crea.name += ' ' + n 
+        }
+        
+        let allDead = focus.filter(e => e.dead).sort((a, b) => a.name > b.name ? 1 : -1)
+        let other = focus.filter(e => !e.dead)
+        other.push(crea)
+        setFocus(other.concat(allDead))
     }
 
     const delFromFocus = (name) => {
         if(name === 'Loot') {
             setHoardLvl(0)
             setFocus([])
+            updateTimeline([])
         }
         else {
             setHoardLvl(hoardLvl - eval(focus.find(elem => elem.name === name).dangerousness))
             setFocus(focus.filter(elem => elem.name !== name))
+            updateTimeline(timeline.filter(elem => elem.name !== name))
         }
     }
 
@@ -128,6 +147,7 @@ const Creatures = ({ show }) => {
             other.push(loot)
         }
         setFocus(other.concat(allDead))
+        updateTimeline(timeline.filter(elem => elem.name !== crea.name))
     }
 
     const _makeFocus = () => {

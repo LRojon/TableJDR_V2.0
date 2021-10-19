@@ -8,7 +8,7 @@ import '../Styles/Main.css'
 
 library.add(fas)
 
-const Main = ({ className }) => {
+const Main = ({ className, timeline, updateTimeline }) => {
 
     const [currentTab, setCurrentTab] = useState('creatures')
 
@@ -20,7 +20,7 @@ const Main = ({ className }) => {
                 <span onClick={() => setCurrentTab('players')} className={currentTab === 'players' ? 'selected tab-item' : 'tab-item'} >Joueurs</span>
                 <span onClick={() => setCurrentTab('tools')} className={currentTab === 'tools' ? 'selected tab-item' : 'tab-item'} >Outils</span>
             </nav>
-            <Creatures show={currentTab === 'creatures'} />
+            <Creatures show={currentTab === 'creatures'} timeline={timeline} updateTimeline={updateTimeline} />
             <Players style={{display: currentTab === 'players' ? 'block' : 'none'}} />
             <Tools style={{display: currentTab === 'tools' ? 'block' : 'none'}} />
         </div> 
