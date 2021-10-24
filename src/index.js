@@ -3,6 +3,9 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './Components/App';
 import reportWebVitals from './reportWebVitals';
+import ReactModal from 'react-modal';
+
+ReactModal.setAppElement('body')
 
 ReactDOM.render(
   <React.StrictMode>

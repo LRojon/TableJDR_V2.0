@@ -1,0 +1,63 @@
+.Creature {
+    display: none;
+}
+
+.Creature.show {
+    display: flex;
+    flex: 1;
+}
+
+.tree {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    border-right: solid var(--main-color) 2px;
+    color: var(--secondary-text-color);
+}
+
+.tree > div:first-child {
+    display: flex;
+    flex: 1;
+    align-items: center;
+    justify-content: center;
+}
+
+.tree > div:first-child > input {
+    margin: 5px;
+}
+
+.tree .sort {
+    display: flex;
+    flex: 1;
+    align-items: center;
+    justify-content: center;
+}
+
+.tree .sort select {
+    flex: 1;
+    margin: 5px;
+    border: solid 2px #0004;
+    border-radius: 10px;
+    background-color: var(--main-color);
+    color: var(--text-color);
+    font-size: medium;
+}
+
+.tree > div:last-child {
+    flex: 20;
+    padding: 5px;
+}
+
+.treeview > div {
+    border-left: 1px dashed var(--text-color) !important; 
+}
+
+.focus {
+    display: flex;
+    flex: 8;
+    flex-wrap: wrap;
+    overflow-y: auto;
+    height: calc(100vh - 70px);
+    margin-right: 5px;
+    scrollbar-width: thin;
+}

@@ -5,14 +5,23 @@ nav {
     color: var(--text-color);
     font-size: x-large;
     padding: 7px;
+    align-items: center;
+}
+
+nav > span:not(.selected) {
+    cursor: pointer;
+}
+nav > .selected {
+    cursor: default;
 }
 
 .tab-item {
-    display: flex;
+    flex: 1;
     margin-left: 10px;
     padding: 5px;
     border-radius: 10px;
     align-items: center;
+    text-align: center;
     transition: ease-out 500ms ;
 }
 .tab-item:not(.selected):hover {
@@ -22,4 +31,26 @@ nav {
 .tab-item.selected {
     background-color: var(--selected-color);
     font-weight: bold;
+}
+
+nav > span[name='username'] {
+    display: flex;
+    flex: 10;
+    justify-content: flex-end;
+}
+
+nav > span[name='username'] i {
+    margin-right: 10px;
+}
+
+nav > span[name='username'] button[name='signOut'] {
+    border: none;
+    background: none;
+    font-size: x-large;
+    margin-left: 10px;
+    color: red;
+    cursor: pointer;
+}
+nav > span[name='username'] button[name='signOut']:hover {
+    color: darkred;
 }

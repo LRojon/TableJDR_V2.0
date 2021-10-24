@@ -1,0 +1,25 @@
+.AbilitiesItem {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    background-color: #0004;
+    border-radius: 10px;
+    padding: 5px;
+    margin: 5px;
+}
+
+.AbilitiesItem span {
+    flex: 1;
+    font-size: x-large;
+    color: var(--text-color);
+}
+
+.AbilitiesItem > div {
+    flex: 5;
+    font-size: large;
+    color: var(--text-color);
+}
+
+.AbilitiesItem i {
+    color: var(--secondary-color);
+}

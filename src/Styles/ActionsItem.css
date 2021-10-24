@@ -1,0 +1,25 @@
+.ActionsItem {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    background-color: #0004;
+    border-radius: 10px;
+    padding: 5px;
+    margin: 5px;
+}
+
+.ActionsItem span {
+    flex: 1;
+    font-size: x-large;
+    color: var(--text-color);
+}
+
+.ActionsItem > div {
+    flex: 2;
+    font-size: large;
+    color: var(--text-color);
+}
+
+.ActionsItem i {
+    color: var(--secondary-color);
+}
