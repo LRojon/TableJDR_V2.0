@@ -1,0 +1,226 @@
+.Player {
+    display: none;
+}
+
+.Player.show {
+    display: flex;
+    flex: 1;
+}
+
+.Player > .tree {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    border-right: solid var(--main-color) 2px;
+    color: var(--secondary-text-color);
+}
+
+.Player > .tree > div {
+    display: flex;
+    flex: 20;
+    align-items: flex-start;
+    justify-content: flex-start;
+}
+
+.Player > .tree > .header {
+    display: flex;
+    flex: 1;
+    align-items: center;
+}
+.Player > .tree > .header > button {
+    flex: 3;
+    border: solid 2px #0004;
+    background-color: var(--main-color);
+    color: var(--text-color);
+    font-size: medium;
+    border-radius: 10px;
+    margin: 5px;
+    cursor: pointer;
+}
+.Player > .tree > .header > button[name='signOut'] {
+    flex: 1;
+    border: none;
+    background: none;
+    font-size: x-large;
+}
+
+.treeview > div {
+    border-left: 1px dashed var(--text-color) !important; 
+}
+
+.focus {
+    display: flex;
+    flex: 6;
+    flex-wrap: wrap;
+    overflow-y: auto;
+    height: calc(100vh - 70px);
+    margin-right: 5px;
+    scrollbar-width: thin;
+}
+
+.modal.custom {
+    border: none;
+    background: none;
+    border-radius: 0px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: calc(100% - 125px);
+}
+
+.partyModal {
+    border: solid 2px #0004;
+    border-radius: 10px;
+    background-color: var(--main-color);
+    color: var(--text-color);
+    display: flex;
+    flex-direction: column;
+    padding: 5px;
+    width: 500px;
+}
+
+.partyModal .header, .playerModal .header {
+    display: flex;
+    flex: 1;
+    border-bottom: solid 2px #0004;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.partyModal .header button, .playerModal .header button {
+    border: none;
+    background: none;
+    color: var(--text-color);
+    font-size: xx-large;
+    margin-right: 10px;
+}
+.partyModal .header button:hover, .playerModal .header button:hover {
+    color: var(--secondary-text-color);
+}
+
+.partyModal .body {
+    display: flex;
+    flex: 5;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 5px 10px 5px;
+}
+.partyModal .body input {
+    text-align: center;
+}
+
+.partyModal .footer, .playerModal .footer {
+    display: flex;
+    flex: 1;
+    align-items: center;
+    justify-content: flex-end;
+    border-top: solid 2px #0004;
+    padding: 5px;
+}
+.partyModal .footer button, .playerModal .footer button {
+    border: solid 2px #0004;
+    border-radius: 10px;
+    background-color: var(--main-color);
+    color: var(--text-color);
+    font-size: large;
+}
+.partyModal .footer button:hover, .playerModal .footer button:hover {
+    background-color: var(--selected-color);
+}
+
+.playerModal {
+    border: solid 2px #0004;
+    border-radius: 10px;
+    background-color: var(--main-color);
+    color: var(--text-color);
+    display: flex;
+    flex-direction: column;
+    padding: 5px;
+    width: 1000px;
+}
+
+.playerModal .body {
+    display: flex;
+    flex: 5;
+}
+
+.playerModal .body .simple {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    margin: 5px;
+}
+.playerModal .body .simple div {
+    display: flex;
+    flex: 1;
+    margin: 5px;
+    align-items: center;
+}
+.playerModal .body .simple input {
+    flex: 1;
+    text-align: center;
+}
+
+.playerModal .body .complex {
+    display: flex;
+    flex: 2;
+    flex-direction: column;
+}
+
+.playerModal .body .complex .stats {
+    display: flex;
+    flex: 1;
+    margin: 5px;
+}
+
+.playerModal .body .complex .stats > div {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    align-items: center;
+    border: solid 2px #0004;
+}
+.playerModal .body .complex .stats > div:first-child {
+    border-radius: 10px 0px 0px 10px;
+}
+.playerModal .body .complex .stats > div:last-child {
+    border-radius: 0px 10px 10px 0px;
+}
+.playerModal .body .complex .stats > div:not(:first-child) {
+    border-left: none;
+}
+.playerModal .body .complex .stats > div > div:nth-child(2) {
+    width: calc(100% - 10px);
+}
+.playerModal .body .complex .stats > div > div:nth-child(2) {
+    display: flex;
+    flex: 1;
+    padding: 5px;
+    border-top: solid 2px #0004;
+}
+
+.playerModal .body .complex .stats input {
+    display: flex;
+    flex: 1;
+    width: 25px;
+    text-align: center;
+    font-size: large;
+    margin: 2px;
+}
+
+.playerModal .body .complex .mastery {
+    flex: 5;
+    margin: 5px;
+    border-radius: 10px;
+    border: solid 2px #0004;
+    background-color: var(--main-color);
+    padding: 5px;
+    color: var(--text-color);
+    font-size: large;
+    resize: none;
+}
+
+
+input[type='number'] {
+    -moz-appearance: textfield;
+}

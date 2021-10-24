@@ -1,0 +1,82 @@
+.Login {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.Login > .signin {
+    display: flex;
+    flex-direction: column;
+    background-color: var(--main-color);
+    border: solid 2px #0004;
+    border-radius: 10px;
+}
+
+.Login > .signin > * {
+    margin: 15px;
+    font-size: xx-large;
+    text-align: center;
+}
+
+.Login input {
+    background-color: var(--text-color);
+    color: var(--secondary-color);
+}
+.Login input::placeholder {
+    color: var(--main-color);
+}
+.Login button {
+    border: solid 2px #0004;
+    border-radius: 10px;
+    color: var(--secondary-color);
+    background-color: #fff8;
+    cursor: pointer;
+}.Login button:hover {
+    color: var(--secondary-color);
+    background-color: #fff6;
+}
+
+.Login .signin > span {
+    color: var(--text-color);
+    font-size: medium;
+    margin-top: 0px;
+    cursor: pointer;
+    text-decoration: underline;
+}
+.Login .signin > span:hover {
+    color: var(--secondary-text-color);
+}
+
+
+
+.Login > .signup {
+    display: flex;
+    flex-direction: column;
+    background-color: var(--main-color);
+    border: solid 2px #0004;
+    border-radius: 10px;
+}
+
+.Login > .signup > * {
+    margin: 15px;
+    font-size: xx-large;
+    text-align: center;
+}
+
+.Login .signup > span {
+    color: var(--text-color);
+    font-size: medium;
+    margin-top: 0px;
+    cursor: pointer;
+    text-decoration: underline;
+}
+.Login .signup > span:hover {
+    color: var(--secondary-text-color);
+}
+
+.Login .signup > div {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
