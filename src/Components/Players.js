@@ -8,16 +8,16 @@ import 'contextmenu/ContextMenu.css'
 import Login from './Helper/Login'
 import ReactModal from 'react-modal'
 import { useRef } from 'react'
+import PlayerCard from './Helper/PlayerCard'
 
-const PartyTree = ({ parties, onAddPlayer, onDeletePlayer }) => {
+const PartyTree = ({ parties, onAddPlayer, onDeletePlayer, onPlayerClick }) => {
     const [contextMenu, useCM] = useContextMenu() 
 
-    const _makePlayerMenu = (player) => {
+    const _makePlayerMenu = (player, party) => {
         let config = {}
         config[player.name] = null
         config['Line'] = '---'
-        config['Modifier'] = () => console.log('Player modify')
-        config['Supprimer'] = () => onDeletePlayer(player)
+        config['Supprimer'] = () => onDeletePlayer(player, party)
         return config
     }
     const _makePartyMenu = (party) => {
@@ -25,14 +25,13 @@ const PartyTree = ({ parties, onAddPlayer, onDeletePlayer }) => {
         config[party.name] = null
         config['Line'] = '---'
         config['Ajouter personnage'] = () => onAddPlayer(party)
-        config['Modifier groupe'] = null//() => console.log('Modify')
         config['Supprimer'] = () => console.log('Delete')
         return config
     }
 
-    const PlayerItem = ({ player }) => {
+    const PlayerItem = ({ player, party }) => {
         return (
-            <div key={player._id} onContextMenu={useCM(_makePlayerMenu(player))} >
+            <div onClick={() => onPlayerClick(player)} onContextMenu={useCM(_makePlayerMenu(player, party))} >
                 <CustomTree 
                     content={player.name} 
                     style={{ cursor: 'pointer' }}
@@ -44,16 +43,17 @@ const PartyTree = ({ parties, onAddPlayer, onDeletePlayer }) => {
 
     const PartyItem = ({ party }) => {
         return (
-            <div key={party._id} onContextMenu={useCM(_makePartyMenu(party))} >
+            <div onContextMenu={useCM(_makePartyMenu(party))} >
                 <CustomTree content={party.name}>
                     {
-                        party.players.map(player => <PlayerItem player={player} />)
+                        party.players.map(player => {
+                            return (<PlayerItem key={player._id} party={party} player={player} />)
+                        })
                     }
                 </CustomTree>
             </div>
         )
     }
-
     return (
         <Tree
             icons={{plusIcon: (props) => <i {...props} className='fad fa-books' ></i>, minusIcon: (props) => <i {...props} className='fad fa-books' ></i>}} 
@@ -61,7 +61,7 @@ const PartyTree = ({ parties, onAddPlayer, onDeletePlayer }) => {
             open
         >
             {
-                parties.map(party => <PartyItem party={party} />)
+                parties.map(party => {return(<PartyItem key={party._id} party={party} />)})
             }
             {contextMenu}
         </Tree>
@@ -69,6 +69,8 @@ const PartyTree = ({ parties, onAddPlayer, onDeletePlayer }) => {
 }
 
 const Players = ({ show, timeline, updateTimeline, user, setUser }) => {
+
+    const [focus, setFocus] = useState([])
 
     const [parties, setParties] = useState([])
     const [partiesIsLoading, setPartiesIsLoading] = useState(false)
@@ -112,43 +114,36 @@ const Players = ({ show, timeline, updateTimeline, user, setUser }) => {
     const armor = useRef(null)
     const mastery = useRef(null)
 
-    useEffect(() => {
+    useEffect(async () => {
         if(user !== null) {
             setPartiesIsLoading(true)
-            fetch('https://table.lrojon.fr/parties/get/all', {
+            const response = await fetch('https://table.lrojon.fr/parties/get/all', {
                 method: 'POST',
                 headers: {
                     'Content-type' : 'application/json'
                 },
-                body: JSON.stringify({
-                    token: user.token
-                })
+                body: JSON.stringify({ token: user.token })
             })
-            .then(res => res.json())
-            .then(data => {
-                console.log(data);
-                data.forEach(party => {
-                    let tmpPlayers = [...party.players]
-                    party.players = []
-                    tmpPlayers.forEach(player => {
-                        fetch('https://table.lrojon.fr/players/get/name/' + player, {
-                            method: 'POST',
-                            headers: {
-                                'Content-type' : 'application/json'
-                            },
-                            body: JSON.stringify({
-                                token: user.token
-                            })
-                        })
-                        .then(res => res.json())
-                        .then(d => {
-                            party.players.push(d)
+            const awaitParties = await response.json()
+            for await (const party of awaitParties) {
+                let tmpPlayers = [...party.players]
+                party.players = []
+                for await (const name of tmpPlayers) {
+                    const res = await fetch('https://table.lrojon.fr/players/get/name/' + name, {
+                        method: 'POST',
+                        headers: {
+                            'Content-type' : 'application/json'
+                        },
+                        body: JSON.stringify({
+                            token: user.token
                         })
                     })
-                })
-                setParties(data)
-                setPartiesIsLoading(false)
-            })
+                    const player = await res.json()
+                    party.players.push(player)
+                }
+            }
+            setParties(awaitParties)
+            setPartiesIsLoading(false)
         }
     }, [user, partiesChange])
 
@@ -173,8 +168,21 @@ const Players = ({ show, timeline, updateTimeline, user, setUser }) => {
             setPartyModal(false)
         })
     }
+    const _deleteParty = async (party) => {
+        const response = await fetch('https://table.lrojon.fr/parties/del/one', {
+            method: 'POST',
+            headers: {
+                'Content-type' : 'application/json'
+            },
+            body: JSON.stringify({
+                token: user.token,
+                party_id: party._id
+            })
+        })
+        alert(await response.text())
+    }
 
-    const _createPlayer = () => {
+    const _createPlayer = async () => {
         let body = {
             token: user.token,
             character: {
@@ -212,39 +220,85 @@ const Players = ({ show, timeline, updateTimeline, user, setUser }) => {
                 }
             }
         }
-
-        fetch('https://table.lrojon.fr/players/set/one', {
+        const res = await fetch('https://table.lrojon.fr/players/set/one', {
             method: 'POST',
             headers: {
                 'Content-type' : 'application/json'
             },
             body: JSON.stringify(body)
         })
-        .then(async res => {
-            alert(await res.text())
+        
+        alert(await res.text())
 
-            let tmp = {...newPlayerParty}
-            tmp.players.push(playerName.current.value)
-            console.log({
+        let tmp = {...newPlayerParty}
+        tmp.players = []
+        for(const player of newPlayerParty.players) {
+            tmp.players.push(player.name)
+        }
+        tmp.players.push(playerName.current.value)
+        await fetch('https://table.lrojon.fr/parties/set/one', {
+            method: 'POST',
+            headers: {
+                'Content-type' : 'application/json'
+            },
+            body: JSON.stringify({
                 token : user.token,
-                party: newPlayerParty
-            });
-            fetch('https://table.lrojon.fr/parties/set/one', {
-                method: 'POST',
-                headers: {
-                    'Content-type' : 'application/json'
-                },
-                body: JSON.stringify({
-                    token : user.token,
-                    party: newPlayerParty
-                })
-            })
-            .then(res => {
-                setPlayerModal(false)
-                setPartiesChange(!partiesChange)
+                party: tmp
             })
         })
+        setPlayerModal(false)
+        setPartiesChange(!partiesChange)
     }
+    const _editPlayer = async (player) => {
+        const response = await fetch('https://table.lrojon.fr/players/set/one', {
+            method: 'POST',
+            headers: {
+                'Content-type' : 'application/json'
+            },
+            body: JSON.stringify({
+                token: user.token,
+                character: player
+            })
+        })
+        alert(await response.text())
+        setPartiesChange(!partiesChange)
+        for(const elem of focus) {
+            if(elem.name === player.name) {
+                let t = {...player}
+                t['player'] = true
+                let tmp = focus.filter(e => e.name !== t.name)
+                tmp.push(t)
+                setFocus(tmp)
+            }
+        }
+    }
+    const _deletePlayer = async (player, party) => {
+
+        // Modify party for remove player from this
+
+        const response = await fetch('https://table.lrojon.fr/players/del/one', {
+            method: 'POST',
+            headers: {
+                'Content-type' : 'applciation/json'
+            },
+            body: JSON.stringify({
+                token: user.token,
+                character_id: player._id
+            })
+        })
+        alert(await response.text())
+    }
+
+    const _addFocus = (player) => {
+        let t = {...player}
+        t['player'] = true
+        setFocus([...focus, t])
+    }
+
+    const _delFocus = (player) => {
+        setFocus(focus.filter(e => e.name !== player.name))
+    }
+
 
     if(user) {
         return (
@@ -264,13 +318,25 @@ const Players = ({ show, timeline, updateTimeline, user, setUser }) => {
                                         setNewPlayerParty(party)
                                         setPlayerModal(true)
                                     }}
-                                    onDeletePlayer={(player) => console.log(player)}
+                                    onDeletePlayer={(player, party) => _deletePlayer(player, party)}
+                                    onPlayerClick={(player) => focus.filter(e => e.name === player.name).length === 0 ? _addFocus(player) : null}
                                 />
                         }
                     </div>
                 </div>
                 <div className='focus'>
-
+                        {
+                            focus.map(player => {
+                                return (
+                                    <PlayerCard 
+                                        key={player._id} 
+                                        player={player}
+                                        onDeleteClick={() => _delFocus(player)}
+                                        onEditPlayer={(player) => _editPlayer(player)}
+                                    />
+                                )
+                            })
+                        }
                 </div>
                 <ReactModal
                     isOpen={partyModal}
