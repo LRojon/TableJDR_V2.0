@@ -1,0 +1,30 @@
+.Tools {
+    display: none;
+}
+
+.Tools.show {
+    display: flex;
+    flex: 1;
+    color: var(--text-color);
+}
+
+.Tools > .tree {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    border-right: solid var(--main-color) 2px;
+    color: var(--secondary-text-color);
+}
+
+.Tools > .tree > div {
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+}
+
+.Tools > .focus > iframe {
+    flex: 1;
+    border: none;
+}
