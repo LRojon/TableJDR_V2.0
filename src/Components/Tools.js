@@ -51,7 +51,7 @@ const Tools = ({ show }) => {
                 </div>
             </div>
             <div className='focus'>
-                { tool !== '' ? <iframe src={tool} /> : null }
+                { tool !== '' ? <iframe src={tool} title='tools' /> : null }
             </div>
         </div>
     )
