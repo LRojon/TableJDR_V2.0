@@ -41,7 +41,9 @@ const Main = ({ className, timeline, updateTimeline }) => {
                 user={user}
                 setUser={setUser}
             />
-            <Tools style={{display: currentTab === 'tools' ? 'block' : 'none'}} />
+            <Tools 
+                show={currentTab === 'tools'} 
+            />
         </div> 
     )
 }
