@@ -10,22 +10,36 @@ import ReactModal from 'react-modal'
 import { useRef } from 'react'
 import PlayerCard from './Helper/PlayerCard'
 
-const PartyTree = ({ parties, onAddPlayer, onDeletePlayer, onPlayerClick }) => {
+const PartyTree = ({ parties, onAddPlayer, onDeletePlayer, onPlayerClick, onDeleteParty }) => {
     const [contextMenu, useCM] = useContextMenu() 
+
+    const Title = ({ title }) => {
+        return(
+            <div
+                style={{
+                    textAlign: 'center',
+                    fontSize: 'large',
+                    fontWeight: 'bold',
+                }}
+            >
+                {title}
+            </div>
+        )
+    }
 
     const _makePlayerMenu = (player, party) => {
         let config = {}
-        config[player.name] = null
+        config['JSX'] = <Title title={player.name} />
         config['Line'] = '---'
         config['Supprimer'] = () => onDeletePlayer(player, party)
         return config
     }
     const _makePartyMenu = (party) => {
         let config = {}
-        config[party.name] = null
+        config['JSX'] = <Title title={party.name} />
         config['Line'] = '---'
         config['Ajouter personnage'] = () => onAddPlayer(party)
-        config['Supprimer'] = () => console.log('Delete')
+        config['Supprimer'] = () => onDeleteParty(party)
         return config
     }
 
@@ -114,7 +128,7 @@ const Players = ({ show, timeline, updateTimeline, user, setUser }) => {
     const armor = useRef(null)
     const mastery = useRef(null)
 
-    useEffect(async () => {
+    const _getTree = async () => {
         if(user !== null) {
             setPartiesIsLoading(true)
             const response = await fetch('https://table.lrojon.fr/parties/get/all', {
@@ -145,6 +159,10 @@ const Players = ({ show, timeline, updateTimeline, user, setUser }) => {
             setParties(awaitParties)
             setPartiesIsLoading(false)
         }
+    }
+
+    useEffect(() => {
+        _getTree();
     }, [user, partiesChange])
 
     const _createParty = () => {
@@ -180,6 +198,7 @@ const Players = ({ show, timeline, updateTimeline, user, setUser }) => {
             })
         })
         alert(await response.text())
+        setPartiesChange(!partiesChange)
     }
 
     const _createPlayer = async () => {
@@ -274,12 +293,24 @@ const Players = ({ show, timeline, updateTimeline, user, setUser }) => {
     }
     const _deletePlayer = async (player, party) => {
 
-        // Modify party for remove player from this
+        let tmp = {...party}
+        tmp.players = tmp.players.filter(el => el.name !== player.name)
+
+        await fetch('https://table.lrojon.fr/parties/set/one', {
+            method: 'POST',
+            headers: {
+                'Content-type' : 'application/json'
+            },
+            body: JSON.stringify({
+                token: user.token,
+                party: tmp
+            })
+        })
 
         const response = await fetch('https://table.lrojon.fr/players/del/one', {
             method: 'POST',
             headers: {
-                'Content-type' : 'applciation/json'
+                'Content-type' : 'application/json'
             },
             body: JSON.stringify({
                 token: user.token,
@@ -287,16 +318,20 @@ const Players = ({ show, timeline, updateTimeline, user, setUser }) => {
             })
         })
         alert(await response.text())
+        setFocus(focus.filter(e => e.name !== player.name))
+        setPartiesChange(!partiesChange)
     }
 
     const _addFocus = (player) => {
         let t = {...player}
         t['player'] = true
+        t['init'] = 0
         setFocus([...focus, t])
+        updateTimeline([...timeline, t])
     }
-
     const _delFocus = (player) => {
         setFocus(focus.filter(e => e.name !== player.name))
+        updateTimeline(timeline.filter(e => e.name !== player.name))
     }
 
 
@@ -320,6 +355,7 @@ const Players = ({ show, timeline, updateTimeline, user, setUser }) => {
                                     }}
                                     onDeletePlayer={(player, party) => _deletePlayer(player, party)}
                                     onPlayerClick={(player) => focus.filter(e => e.name === player.name).length === 0 ? _addFocus(player) : null}
+                                    onDeleteParty={(party) => _deleteParty(party)}
                                 />
                         }
                     </div>
