@@ -1,35 +1,65 @@
 import React, { useRef, useState } from 'react'
 import '../Styles/Timeline.css'
+import Randomizer from './Helper/Randomizer'
 
 const Timeline = ({ className, timeline, updateTimeline }) => {
 
     const [fightStarted, setFightStarted] = useState(false)
     const [currentTurn, setCurrentTurn] = useState(0)
     const elements = useRef([])
-    const lineTime = useRef(null)
+    const [mobNumber, setMobNumber] = useState(timeline.filter(e => !e.player).length)
+
+    const _logTimeline = () => {
+        let ret = '--- Timeline ---\nFightStarted: ' + fightStarted + '\n'
+        for(const elem of timeline) {
+            ret += elem.name + ' | ' + elem.init + '\n'
+        }
+        console.log(ret)
+    }
 
     const startFight = () => {
-        if(timeline.length > 0) { 
+        setMobNumber(timeline.filter(e => !e.player).length)
+        if(mobNumber > 0) { 
             setFightStarted(true)
+
+            let tmp = [...timeline]
+            for(const elem of tmp) {
+                if(elem.player) {
+                    elem.init = Randomizer("1d20+0") + elem.stats.dex.mod
+                }
+            }
+
             timeline.sort((a, b) => b.init - a.init)
+            _logTimeline()
         }
     }
 
     const next = () => {
-        let nextTurn = currentTurn + 1 === timeline.length ? 0 : currentTurn + 1
-        elements.current[nextTurn].scrollIntoView({ behavior: 'smooth' })
-        setCurrentTurn(nextTurn)
+        setMobNumber(timeline.filter(e => !e.player).length)
+        if(timeline.filter(e => !e.player).length > 0) {
+            setFightStarted(true)
+            let nextTurn = currentTurn > timeline.length - 1 ? 0 : (currentTurn === timeline.length - 1 ? 0 : currentTurn + 1)
+            elements.current[nextTurn].scrollIntoView({ behavior: 'smooth' })
+            setCurrentTurn(nextTurn)
+        }
+        _logTimeline()
+    }
+
+    const endFight = () => {
+        setFightStarted(false)
+        setCurrentTurn(0)
+        _logTimeline()
     }
 
     return (
         <div className={className} >
             <div className='header'>
                 <button 
-                    onClick={() => fightStarted ? (timeline.length > 0 ? next() : setFightStarted(false)) : startFight()}
+                    onClick={() => fightStarted ? (mobNumber > 0 ? next() : endFight()) : startFight()}
                 >
                     {
                         fightStarted ? 
-                            timeline.length > 0 ?
+                            mobNumber > 0 ?
                                 'Suivant'
                             :
                                 'Fin'
@@ -39,7 +69,7 @@ const Timeline = ({ className, timeline, updateTimeline }) => {
                 </button>
             </div>
             <div>
-                <div ref={lineTime} onClick={() => console.log(lineTime.current.offsetHeight)} >
+                <div>
                     <span className='line-time'>&emsp;</span>
                     {
                         timeline.map((elem, index) => {

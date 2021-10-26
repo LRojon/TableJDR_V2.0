@@ -155,9 +155,11 @@
     flex: 1;
     margin: 5px;
     align-items: center;
+    justify-content: space-around;
 }
 .playerModal .body .simple input {
     flex: 1;
+    max-width: 65%;
     text-align: center;
 }
 
