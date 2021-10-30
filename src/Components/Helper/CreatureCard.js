@@ -70,12 +70,20 @@ const CreatureCard = ({ creature, onDeleteClick, onDeath }) => {
                             className='fas fa-minus'
                             onClick={() => setCurrentHPWithControl(currentHP - 1)}
                         ></i>
+                        <i 
+                            className='fas fa-minus'
+                            onClick={() => setCurrentHPWithControl(currentHP - 10)}
+                        > 10</i>
                         <input 
                             type='text'
                             value={currentHP + ' / ' + maxHP.current}
                             readOnly
                             disabled
                         />
+                        <i 
+                            className='fas fa-plus' 
+                            onClick={() => setCurrentHPWithControl(currentHP + 10)}
+                        > 10</i>
                         <i 
                             className='fas fa-plus' 
                             onClick={() => setCurrentHPWithControl(currentHP + 1)}
@@ -125,12 +133,20 @@ const CreatureCard = ({ creature, onDeleteClick, onDeath }) => {
                                     className='fas fa-minus'
                                     onClick={() => setCurrentHPWithControl(currentHP - 1)}
                                 ></i>
+                                <i 
+                                    className='fas fa-minus'
+                                    onClick={() => setCurrentHPWithControl(currentHP - 10)}
+                                > 10</i>
                                 <input 
                                     type='text'
                                     value={currentHP + ' / ' + maxHP.current}
                                     readOnly
                                     disabled
                                 />
+                                <i 
+                                    className='fas fa-plus' 
+                                    onClick={() => setCurrentHPWithControl(currentHP + 10)}
+                                > 10</i>
                                 <i 
                                     className='fas fa-plus' 
                                     onClick={() => setCurrentHPWithControl(currentHP + 1)}
