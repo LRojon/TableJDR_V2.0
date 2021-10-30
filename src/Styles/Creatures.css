@@ -13,6 +13,7 @@
     flex-direction: column;
     border-right: solid var(--main-color) 2px;
     color: var(--secondary-text-color);
+    max-width: 250px;
 }
 
 .tree > div:first-child {
@@ -24,6 +25,7 @@
 
 .tree > div:first-child > input {
     margin: 5px;
+    width: 250px;
 }
 
 .tree .sort {
@@ -44,8 +46,9 @@
 }
 
 .tree > div:last-child {
-    flex: 20;
+    height: 80vh;
     padding: 5px;
+    overflow-y: scroll;
 }
 
 .treeview > div {

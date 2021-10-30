@@ -55,11 +55,21 @@
     text-align: center;
     padding-top: 7px;
     cursor: pointer;
+    display: flex;
+    justify-content: center;
 }
 .hp-input i:hover {
     width: 25px;
     border: solid 2px #0004;
     background-color: #0008;
+}
+.hp-input i:nth-child(2) {
+    border-left: none;
+    width: 40px;
+}
+.hp-input i:nth-child(4) {
+    border-right: none;
+    width: 40px;
 }
 .hp-input i:first-child {
     border-radius: 100px 0px 0px 100px;
@@ -68,7 +78,7 @@
     border-radius: 0px 100px 100px 0px;
 }
 .hp-input input {
-    width: calc(100% - 60px);
+    width: calc(100% - 140px);
     border-radius: 0px;
     border: solid 2px #0004;
     border-left: none;
@@ -122,7 +132,7 @@
     border-radius: 10px;
     background-color: #0004;
     padding: 5px;
-    height: 205px;
+    height: 180px;
     display: flex;
     flex-direction: column;
     scrollbar-width: thin;
@@ -191,6 +201,13 @@
     flex: 14;
     margin: 10px;
 }
+.modal .left > div:nth-child(1) .hp-input > input {
+    flex: 14;
+    width: calc(100% - 210px);
+}
+.modal .left > div:nth-child(1) .hp-input > i:nth-child(2), .modal .left > div:nth-child(1) .hp-input > i:nth-child(4) {
+    width: 75px;
+}
 
 .modal .left > div:nth-child(2) {
     flex: 1;
@@ -240,19 +257,22 @@
 }
 
 .modal .left > div:nth-child(5),.modal .left > div:nth-child(6), .modal .left > div:nth-child(7) {
-    flex: 5;
+    height: 33%;
     display: flex;
     flex-direction: column;
     background-color: #0004;
     border-radius: 10px;
     margin: 5px;
 }
+.modal .left > div:nth-child(5) > div,.modal .left > div:nth-child(6) > div, .modal .left > div:nth-child(7) > div{
+    overflow-y: auto;
+}
 .modal .left > div:nth-child(6) {
-    flex: 3;
+    height: 17%;
 }
 
 .modal .left > div:nth-child(7) {
-    flex: 3;
+    height: 17%;
 }
 .modal .left > div:nth-child(5) > span, .modal .left > div:nth-child(6) > span, .modal .left > div:nth-child(7) > span {
     flex: 1;

@@ -9,7 +9,7 @@ import Randomizer from './Helper/Randomizer'
 
 const Creatures = ({ show, timeline, updateTimeline }) => {
 
-    const [treeSort, setTreeSort] = useState('name')
+    const [treeSort, setTreeSort] = useState('type')
     const [tmpCreatures, setTmpCreatures] = useState(creatures)
     const [isSearch, setIsSearch] = useState(false)
     const [focus, setFocus] = useState([])
@@ -20,11 +20,16 @@ const Creatures = ({ show, timeline, updateTimeline }) => {
 
         switch(sort) {
             case 'name':
-                categories = tmpCreatures.reduce((prev, current) => prev.includes(current.name.substring(0, 1)) ? prev : [...prev, current.name.substring(0, 1)], [])
-                categories.sort((a, b) => a < b ? -1 : 1 )
+                categories = tmpCreatures.reduce((prev, current) => prev.includes(current.name.normalize("NFD").replace(/[\u0300-\u036f]/g, "").substring(0, 1)) ? prev : [...prev, current.name.normalize("NFD").replace(/[\u0300-\u036f]/g, "").substring(0, 1)], [])
+                categories.sort((a, b) => a.normalize("NFD").replace(/[\u0300-\u036f]/g, "") < b.normalize("NFD").replace(/[\u0300-\u036f]/g, "") ? -1 : 1 )
                 break;
-            case 'size':
-                categories = ['Très petite', 'Petite', 'Moyenne', 'Grande', 'Très grande', 'Gigantesque']
+            case 'dangerousness':
+                categories = tmpCreatures.reduce((prev, current) => prev.includes(current[sort]) ? prev : [...prev, current[sort]], [])
+                categories.sort((a, b) => parseInt(a) < parseInt(b) ? -1 : 1 )
+                break;
+            case 'type':
+                categories = tmpCreatures.reduce((prev, current) => prev.includes(current[sort].split(' (')[0]) ? prev : [...prev, current[sort].split(' (')[0]], [])
+                categories.sort((a, b) => a.normalize("NFD").replace(/[\u0300-\u036f]/g, "") < b.normalize("NFD").replace(/[\u0300-\u036f]/g, "") ? -1 : 1 )
                 break;
             default:
                 categories = tmpCreatures.reduce((prev, current) => prev.includes(current[sort]) ? prev : [...prev, current[sort]], [])
@@ -44,7 +49,7 @@ const Creatures = ({ show, timeline, updateTimeline }) => {
                             <CustomTree key={elem} content={elem} >
                                 {
                                     tmpCreatures.filter(creature => isInCategory(sort, creature, elem))
-                                    .sort((a, b) => a.name < b.name ? -1 : 1)
+                                    .sort((a, b) => a.name.normalize("NFD").replace(/[\u0300-\u036f]/g, "") < b.name.normalize("NFD").replace(/[\u0300-\u036f]/g, "") ? -1 : 1)
                                     .map(el => {
                                         return (
                                             <CustomTree 
@@ -67,7 +72,9 @@ const Creatures = ({ show, timeline, updateTimeline }) => {
     const isInCategory = (sort, creature, category) => {
         switch(sort) {
             case 'name':
-                return creature.name.substring(0, 1) === category
+                return creature.name.normalize("NFD").replace(/[\u0300-\u036f]/g, "").substring(0, 1) === category
+            case 'type':
+                return creature.type.split(' (')[0] === category
             default:
                 return creature[sort] === category
         }
@@ -75,17 +82,15 @@ const Creatures = ({ show, timeline, updateTimeline }) => {
 
     const searchByName = (name) => {
         name = name !== '' && name !== null ? name : ''
-        name = name.trim().toLowerCase()
+        name = name.trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "")
         if(name !== '') {
-            console.log(name)
             let tmp = []
             creatures.forEach(crea => {
-                if(crea.name.toLowerCase().includes(name)) { tmp.push(crea) }
+                if(crea.name.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").includes(name)) { tmp.push(crea) }
             })
             setTmpCreatures(tmp)
         }
         else {
-            console.log('name to search is empty')
             setTmpCreatures(creatures)
         }
     }
@@ -184,11 +189,10 @@ const Creatures = ({ show, timeline, updateTimeline }) => {
                 </div>
                 <div className='sort'>
                     <select value={treeSort} onChange={(e) => setTreeSort(e.target.value)} >
-                        <option value='name' >Nom</option>
                         <option value='type' >Type</option>
+                        <option value='name' >Nom</option>
                         <option value='dangerousness' >Dangerosité</option>
                         <option value='armor' >Classe d'armure</option>
-                        <option value='size' >Taille</option>
                         <option value='xp' >Points d'XP donné</option>
                     </select>
                 </div>
