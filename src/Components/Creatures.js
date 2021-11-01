@@ -1,19 +1,32 @@
-import React, { useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import Tree from 'react-animated-tree-v2'
 import '../Styles/Creatures.css'
-import creatures from '../Data/Creatures'
 import CreatureCard from './Helper/CreatureCard'
 import CustomTree from './Helper/CustomTree'
 import { makeHoardLoot, makeIndividualLoot } from './Helper/Loot'
 import Randomizer from './Helper/Randomizer'
+import loader from '../Assets/Images/loader_white.gif'
 
 const Creatures = ({ show, timeline, updateTimeline }) => {
 
+    const creatures = useRef([])
     const [treeSort, setTreeSort] = useState('type')
-    const [tmpCreatures, setTmpCreatures] = useState(creatures)
+    const [tmpCreatures, setTmpCreatures] = useState(creatures.current)
     const [isSearch, setIsSearch] = useState(false)
     const [focus, setFocus] = useState([])
     const [hoardLvl, setHoardLvl] = useState(0)
+    const [loading, setLoading] = useState(false)
+
+    useEffect(() => {
+        setLoading(true)
+        fetch('https://table.lrojon.fr/creatures/get/all')
+        .then(res => res.json())
+        .then(data => {
+            creatures.current = data
+            setTmpCreatures(creatures.current)
+            setLoading(false)
+        })
+    }, [])
 
     const makeTree = (sort) => {
         let categories = []
@@ -85,22 +98,22 @@ const Creatures = ({ show, timeline, updateTimeline }) => {
         name = name.trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "")
         if(name !== '') {
             let tmp = []
-            creatures.forEach(crea => {
+            creatures.current.forEach(crea => {
                 if(crea.name.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").includes(name)) { tmp.push(crea) }
             })
             setTmpCreatures(tmp)
         }
         else {
-            setTmpCreatures(creatures)
+            setTmpCreatures(creatures.current)
         }
     }
 
     const addToFocus = (name) => {
         let crea = {
-            ...creatures.find(elem => elem.name === name), 
+            ...creatures.current.find(elem => elem.name === name), 
             loot: [], 
             dead: false, 
-            init: Randomizer('1d20+' + creatures.find(elem => elem.name === name).stats.dex.mod)
+            init: Randomizer('1d20+' + creatures.current.find(elem => elem.name === name).stats.dex.mod)
         }
         updateTimeline(([...timeline, crea]).sort((a, b) => b.init - a.init))
         setHoardLvl(hoardLvl + eval(crea.dangerousness))
@@ -198,7 +211,7 @@ const Creatures = ({ show, timeline, updateTimeline }) => {
                 </div>
                 <div>
                     {
-                        makeTree(treeSort)
+                        loading ? <img src={loader} style={{color: 'white', width: 235, height: 235}} alt='Loading...' /> : makeTree(treeSort)
                     }
                 </div>
             </div>
