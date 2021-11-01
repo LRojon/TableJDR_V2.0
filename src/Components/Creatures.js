@@ -19,7 +19,7 @@ const Creatures = ({ show, timeline, updateTimeline }) => {
 
     useEffect(() => {
         setLoading(true)
-        fetch('https://table.lrojon.fr/creatures/get/all')
+        fetch('https://table.lrojon.fr/creatures/get/all/low')
         .then(res => res.json())
         .then(data => {
             creatures.current = data
@@ -108,12 +108,14 @@ const Creatures = ({ show, timeline, updateTimeline }) => {
         }
     }
 
-    const addToFocus = (name) => {
+    const addToFocus = async (name) => {
+        const response = await fetch('https://table.lrojon.fr/creatures/get/name/' + name)
+        const data = await response.json()
         let crea = {
-            ...creatures.current.find(elem => elem.name === name), 
+            ...data, 
             loot: [], 
             dead: false, 
-            init: Randomizer('1d20+' + creatures.current.find(elem => elem.name === name).stats.dex.mod)
+            init: Randomizer('1d20+' + data.stats.dex.mod)
         }
         updateTimeline(([...timeline, crea]).sort((a, b) => b.init - a.init))
         setHoardLvl(hoardLvl + eval(crea.dangerousness))
